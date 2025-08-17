@@ -1,0 +1,48 @@
+{
+  "name": "dom-hack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack -c ./webpack.config.ts",
+    "dev": "webpack serve -c ./webpack.development.config.ts"
+  },
+  "author": "abdelfetah-dev",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@types/chrome": "^0.1.1",
+    "@types/node": "^24.2.0",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@types/webpack": "^5.28.5",
+    "autoprefixer": "^10.4.21",
+    "babel-loader": "^10.0.0",
+    "chrome-types": "^0.1.368",
+    "copy-webpack-plugin": "^13.0.0",
+    "css-loader": "^7.1.2",
+    "postcss": "^8.5.6",
+    "postcss-loader": "^8.1.1",
+    "postcss-nested": "^7.0.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2",
+    "webpack": "^5.101.0",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
+    "html-webpack-plugin": "^5.6.3",
+    "idb": "^8.0.3",
+    "js-md5": "^0.8.3",
+    "tailwindcss": "^4.1.11"
+  }
+}
