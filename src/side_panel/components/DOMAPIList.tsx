@@ -27,7 +27,7 @@ export default function DOMAPIList({ apiName, keys, events, clear }: DOMAPIListP
                 <div className="w-full flex-col">
                     {
                         events.filter(event => {
-                            const names = Object.getOwnPropertyNames(event).filter(p => !p.includes("hash") && p != "created_at");
+                            const names = Object.getOwnPropertyNames(event);
                             for (let name of names) {
                                 if (event[name].includes(query)) {
                                     return true;

@@ -13,6 +13,8 @@ export interface UseDOMAPIsValue {
     setFetchEvents: Dispatch<SetStateAction<FetchEvent[]>>;
     innerHTMLEvents: InnerHTMLEvent[];
     setInnerHTMLEvents: Dispatch<SetStateAction<InnerHTMLEvent[]>>;
+    onMessageEvents: OnMessageEvent[];
+    setOnMessageEvents: Dispatch<SetStateAction<OnMessageEvent[]>>;
     selectedDOMAPIs: DOMAPI[];
     setSelectedDOMAPIs: Dispatch<SetStateAction<DOMAPI[]>>;
 }
@@ -27,6 +29,7 @@ export default function useDOMAPIs(): UseDOMAPIsValue {
     const [blobEvents, setBlobEvents] = useState<BlobEvent_[]>([]);
     const [fetchEvents, setFetchEvents] = useState<FetchEvent[]>([]);
     const [innerHTMLEvents, setInnerHTMLEvents] = useState<InnerHTMLEvent[]>([]);
+    const [onMessageEvents, setOnMessageEvents] = useState<OnMessageEvent[]>([]);
     const [selectedDOMAPIs, setSelectedDOMAPIs] = useState<DOMAPI[]>(["LocalStorage"]);
 
 
@@ -64,6 +67,11 @@ export default function useDOMAPIs(): UseDOMAPIsValue {
                 operation: value.operation,
             }, ...state]);
         },
+        "dom-hack_onmessage": (value) => {
+            setOnMessageEvents(state => [{
+                data: value.data,
+            }, ...state]);
+        }
     });
 
     const attachedRef = useRef<Set<string>>(new Set());
@@ -111,6 +119,14 @@ export default function useDOMAPIs(): UseDOMAPIsValue {
             attachedRef.current.delete("innerHTML");
         }
 
+        if (currentlySelected.has("onmessage") && !attachedRef.current.has("onmessage")) {
+            sideSidePanelIPC.on("dom-hack_onmessage", handlersRef.current["dom-hack_onmessage"]);
+            attachedRef.current.add("onmessage");
+        } else if (!currentlySelected.has("onmessage") && attachedRef.current.has("onmessage")) {
+            sideSidePanelIPC.remove("dom-hack_onmessage", handlersRef.current["dom-hack_onmessage"]);
+            attachedRef.current.delete("onmessage");
+        }
+
         return () => {
             attachedRef.current.forEach(api => {
                 if (api === "LocalStorage") {
@@ -123,6 +139,8 @@ export default function useDOMAPIs(): UseDOMAPIsValue {
                     sideSidePanelIPC.remove("dom-hack_fetch", handlersRef.current["dom-hack_fetch"]);
                 } else if (api === "innerHTML") {
                     sideSidePanelIPC.remove("dom-hack_innerHTML", handlersRef.current["dom-hack_innerHTML"]);
+                } else if (api === "onmessage") {
+                    sideSidePanelIPC.remove("dom-hack_onmessage", handlersRef.current["dom-hack_onmessage"]);
                 }
             });
             attachedRef.current.clear();
@@ -136,5 +154,6 @@ export default function useDOMAPIs(): UseDOMAPIsValue {
         selectedDOMAPIs, setSelectedDOMAPIs,
         fetchEvents, setFetchEvents,
         innerHTMLEvents, setInnerHTMLEvents,
+        onMessageEvents, setOnMessageEvents,
     };
 }

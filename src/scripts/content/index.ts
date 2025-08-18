@@ -17,6 +17,7 @@ contentIPC.on("dom-hack_URL.createObjectURL", (data) => { sideSidePanelIPC.send(
 contentIPC.on("dom-hack_Blob", (data) => { sideSidePanelIPC.send("dom-hack_Blob", data); });
 contentIPC.on("dom-hack_fetch", (data) => { sideSidePanelIPC.send("dom-hack_fetch", data); });
 contentIPC.on("dom-hack_innerHTML", (data) => { sideSidePanelIPC.send("dom-hack_innerHTML", data); });
+contentIPC.on("dom-hack_onmessage", (data) => { sideSidePanelIPC.send("dom-hack_onmessage", data); });
 
 const scriptURL = chrome.runtime.getURL('scripts/injected.js');
 injectScript(scriptURL);

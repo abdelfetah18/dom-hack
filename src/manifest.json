@@ -15,7 +15,8 @@
                 "scripts/content.js"
             ],
             "matches": [
-                "https://*/**"
+                "https://*/**",
+                "http://*/**"
             ],
             "run_at": "document_start"
         }

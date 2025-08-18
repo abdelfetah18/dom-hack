@@ -2,7 +2,7 @@ import useDOMAPIs from "./hooks/useDOMAPIs";
 import DOMAPIsContext from "./contexts/DOMAPIsContext";
 import DOMAPIList from "./components/DOMAPIList";
 
-const domAPIs: DOMAPI[] = ["LocalStorage", "CreateObjectURL", "Blob", "fetch", "innerHTML"];
+const domAPIs: DOMAPI[] = ["LocalStorage", "CreateObjectURL", "Blob", "fetch", "innerHTML", "onmessage"];
 
 export default function App() {
     const useDOMAPIsValue = useDOMAPIs();
@@ -32,6 +32,8 @@ export default function App() {
                                                 return useDOMAPIsValue.fetchEvents.length;
                                             case "innerHTML":
                                                 return useDOMAPIsValue.innerHTMLEvents.length;
+                                            case "onmessage":
+                                                return useDOMAPIsValue.onMessageEvents.length;
                                             default:
                                                 return 0;
                                         }
@@ -109,6 +111,17 @@ export default function App() {
                             keys={[
                                 "value",
                                 "operation"
+                            ]}
+                        />
+                    )}
+
+                    {useDOMAPIsValue.selectedDOMAPIs.includes("onmessage") && (
+                        <DOMAPIList
+                            apiName="onmessage"
+                            clear={() => useDOMAPIsValue.setOnMessageEvents([])}
+                            events={useDOMAPIsValue.onMessageEvents}
+                            keys={[
+                                "data"
                             ]}
                         />
                     )}
