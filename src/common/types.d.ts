@@ -1,4 +1,4 @@
-type DOMAPI = "LocalStorage" | "CreateObjectURL" | "Blob" | "fetch" | "innerHTML" | "onmessage";
+type DOMAPI = "LocalStorage" | "CreateObjectURL" | "Blob" | "fetch" | "innerHTML" | "onmessage" | "URLSearchParams";
 
 interface Value {
     value: string;
@@ -34,5 +34,11 @@ interface InnerHTMLEvent {
 }
 
 interface OnMessageEvent {
-    data: any;
+    data: string;
+}
+
+interface URLSearchParamsEvent {
+    key: string;
+    value: string;
+    operation: "get" | "set";
 }

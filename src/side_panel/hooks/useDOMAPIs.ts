@@ -15,6 +15,8 @@ export interface UseDOMAPIsValue {
     setInnerHTMLEvents: Dispatch<SetStateAction<InnerHTMLEvent[]>>;
     onMessageEvents: OnMessageEvent[];
     setOnMessageEvents: Dispatch<SetStateAction<OnMessageEvent[]>>;
+    urlSearchParamsEvents: URLSearchParamsEvent[];
+    setURLSearchParamsEvents: Dispatch<SetStateAction<URLSearchParamsEvent[]>>;
     selectedDOMAPIs: DOMAPI[];
     setSelectedDOMAPIs: Dispatch<SetStateAction<DOMAPI[]>>;
 }
@@ -30,6 +32,7 @@ export default function useDOMAPIs(): UseDOMAPIsValue {
     const [fetchEvents, setFetchEvents] = useState<FetchEvent[]>([]);
     const [innerHTMLEvents, setInnerHTMLEvents] = useState<InnerHTMLEvent[]>([]);
     const [onMessageEvents, setOnMessageEvents] = useState<OnMessageEvent[]>([]);
+    const [urlSearchParamsEvents, setURLSearchParamsEvents] = useState<URLSearchParamsEvent[]>([]);
     const [selectedDOMAPIs, setSelectedDOMAPIs] = useState<DOMAPI[]>(["LocalStorage"]);
 
 
@@ -70,6 +73,13 @@ export default function useDOMAPIs(): UseDOMAPIsValue {
         "dom-hack_onmessage": (value) => {
             setOnMessageEvents(state => [{
                 data: value.data,
+            }, ...state]);
+        },
+        "dom-hack_URLSearchParams": (value) => {
+            setURLSearchParamsEvents(state => [{
+                key: value.key,
+                value: value.value,
+                operation: value.operation,
             }, ...state]);
         }
     });
@@ -127,6 +137,14 @@ export default function useDOMAPIs(): UseDOMAPIsValue {
             attachedRef.current.delete("onmessage");
         }
 
+        if (currentlySelected.has("URLSearchParams") && !attachedRef.current.has("URLSearchParams")) {
+            sideSidePanelIPC.on("dom-hack_URLSearchParams", handlersRef.current["dom-hack_URLSearchParams"]);
+            attachedRef.current.add("URLSearchParams");
+        } else if (!currentlySelected.has("URLSearchParams") && attachedRef.current.has("URLSearchParams")) {
+            sideSidePanelIPC.remove("dom-hack_URLSearchParams", handlersRef.current["dom-hack_URLSearchParams"]);
+            attachedRef.current.delete("URLSearchParams");
+        }
+
         return () => {
             attachedRef.current.forEach(api => {
                 if (api === "LocalStorage") {
@@ -141,6 +159,8 @@ export default function useDOMAPIs(): UseDOMAPIsValue {
                     sideSidePanelIPC.remove("dom-hack_innerHTML", handlersRef.current["dom-hack_innerHTML"]);
                 } else if (api === "onmessage") {
                     sideSidePanelIPC.remove("dom-hack_onmessage", handlersRef.current["dom-hack_onmessage"]);
+                } else if (api === "URLSearchParams") {
+                    sideSidePanelIPC.remove("dom-hack_URLSearchParams", handlersRef.current["dom-hack_URLSearchParams"]);
                 }
             });
             attachedRef.current.clear();
@@ -155,5 +175,6 @@ export default function useDOMAPIs(): UseDOMAPIsValue {
         fetchEvents, setFetchEvents,
         innerHTMLEvents, setInnerHTMLEvents,
         onMessageEvents, setOnMessageEvents,
+        urlSearchParamsEvents, setURLSearchParamsEvents,
     };
 }

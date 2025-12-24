@@ -4,7 +4,8 @@ type EventName =
     "dom-hack_Blob" |
     "dom-hack_fetch" |
     "dom-hack_innerHTML" |
-    "dom-hack_onmessage";
+    "dom-hack_onmessage" |
+    "dom-hack_URLSearchParams";
 
 type EventDataMap = {
     "dom-hack_localStorage": { key: string; value: string; operation: "getItem" | "setItem"; };
@@ -12,7 +13,8 @@ type EventDataMap = {
     "dom-hack_Blob": { type: string; };
     "dom-hack_fetch": { url: string; method: string; };
     "dom-hack_innerHTML": { value: string; operation: "get" | "set" };
-    "dom-hack_onmessage": { data: any };
+    "dom-hack_onmessage": { data: string; };
+    "dom-hack_URLSearchParams": { key: string; value: string; operation: "get" | "set"; }
 }
 
 type DataOf<E extends EventName> = EventDataMap[E]

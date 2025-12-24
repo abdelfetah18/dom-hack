@@ -6,6 +6,7 @@ import BlobHook from "./hooks/BlobHook";
 import FetchHook from "./hooks/FetchHook";
 import InnerHTMLHook from "./hooks/InnerHTMLHook";
 import OnMessageHook from "./hooks/OnMessageHook";
+import URLSearchParamsHook from "./hooks/URLSearchParamsHook";
 
 const contentIPC = new ContentIPC(window);
 
@@ -15,6 +16,7 @@ const blobHook = new BlobHook(contentIPC);
 const fetchHook = new FetchHook(contentIPC);
 const innerHTMLHook = new InnerHTMLHook(contentIPC);
 const onMessageHook = new OnMessageHook(contentIPC);
+const urlSearchParamsHook = new URLSearchParamsHook(contentIPC);
 
 localStorageHook.inject();
 createObjectURLHook.inject();
@@ -22,6 +24,7 @@ blobHook.inject();
 fetchHook.inject();
 innerHTMLHook.inject();
 onMessageHook.inject();
+urlSearchParamsHook.inject();
 
 // Test Hock
 // function getMethods(api: any) {

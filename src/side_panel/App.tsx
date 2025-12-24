@@ -2,7 +2,7 @@ import useDOMAPIs from "./hooks/useDOMAPIs";
 import DOMAPIsContext from "./contexts/DOMAPIsContext";
 import DOMAPIList from "./components/DOMAPIList";
 
-const domAPIs: DOMAPI[] = ["LocalStorage", "CreateObjectURL", "Blob", "fetch", "innerHTML", "onmessage"];
+const domAPIs: DOMAPI[] = ["LocalStorage", "CreateObjectURL", "Blob", "fetch", "innerHTML", "onmessage", "URLSearchParams"];
 
 export default function App() {
     const useDOMAPIsValue = useDOMAPIs();
@@ -34,6 +34,8 @@ export default function App() {
                                                 return useDOMAPIsValue.innerHTMLEvents.length;
                                             case "onmessage":
                                                 return useDOMAPIsValue.onMessageEvents.length;
+                                            case "URLSearchParams":
+                                                return useDOMAPIsValue.urlSearchParamsEvents.length;
                                             default:
                                                 return 0;
                                         }
@@ -122,6 +124,19 @@ export default function App() {
                             events={useDOMAPIsValue.onMessageEvents}
                             keys={[
                                 "data"
+                            ]}
+                        />
+                    )}
+
+                    {useDOMAPIsValue.selectedDOMAPIs.includes("URLSearchParams") && (
+                        <DOMAPIList
+                            apiName="URLSearchParams"
+                            clear={() => useDOMAPIsValue.setURLSearchParamsEvents([])}
+                            events={useDOMAPIsValue.urlSearchParamsEvents}
+                            keys={[
+                                "key",
+                                "value",
+                                "operation"
                             ]}
                         />
                     )}
