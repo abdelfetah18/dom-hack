@@ -1,10 +1,13 @@
 import APIHook from "./APIHook";
 
 export default class OnMessageHook extends APIHook {
+    API_NAME: string = "window.onmessage";
+
     static OriginalAddEventListener: any;
 
     inject(): void {
-        const contentIPC = this.contentIPC;
+        const injectedScriptEndpoint = this.injectedScriptEndpoint;
+        const apiHook = this;
 
         let currentOnMessage = null;
         OnMessageHook.OriginalAddEventListener = window.addEventListener;
@@ -14,7 +17,13 @@ export default class OnMessageHook extends APIHook {
                 currentOnMessage = handler;
                 if (handler) {
                     const wrappedHandler = function (event) {
-                        contentIPC.send("dom-hack_onmessage", { data: JSON.stringify(event.data) });
+                        injectedScriptEndpoint.send(
+                            "dom-hack_data-flow-event",
+                            apiHook.createDataFlowEvent(
+                                JSON.stringify(event.data),
+                                "Source",
+                            ),
+                        );
                         return handler(event);
                     };
                     OnMessageHook.OriginalAddEventListener.call(window, 'message', wrappedHandler);

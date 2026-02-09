@@ -12,21 +12,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-export interface DataFlowEvent {
-    id: string;
-    timestamp: number;
-    frameId: string;
-    frameName: string;
-    type: "Source" | "Transform" | "Sink";
-    api: string;
-    riskLevel: "Critical" | "High" | "Medium" | "Low";
-    value: string;
-    hash?: string;
-    location: string;
-    stackTrace?: string[];
-    metadata?: Record<string, string>;
-}
-
 interface EventStreamProps {
     events: DataFlowEvent[];
     trackedHashes: Set<string>;
@@ -109,7 +94,7 @@ export default function EventStream({ events, trackedHashes, onTrackHash }: Even
     };
 
     return (
-        <div className="flex-1 min-h-0 bg-[#1e1e1e]">
+        <div className="flex-1 min-h-0 bg-[#1e1e1e] overflow-auto">
             <div className="h-full">
                 <div className="divide-y divide-[#2d2d30]">
                     {events.length === 0 ? (
@@ -151,13 +136,6 @@ export default function EventStream({ events, trackedHashes, onTrackHash }: Even
                                                 </div>
 
                                                 <span className="text-xs font-mono text-[#cccccc]">{event.api}</span>
-
-                                                <div
-                                                    className={`text-[9px] px-1 h-4 flex items-center gap-0.5 ${getRiskColor(event.riskLevel)}`}
-                                                >
-                                                    {getRiskIcon(event.riskLevel)}
-                                                    {event.riskLevel}
-                                                </div>
 
                                                 {isTracked && (
                                                     <div className="text-[9px] px-1 h-4 bg-[#1f2d3c] border-[#4fc1ff] text-[#4fc1ff] flex items-center gap-0.5">

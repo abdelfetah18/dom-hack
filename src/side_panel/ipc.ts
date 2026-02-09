@@ -1,3 +1,3 @@
-import { SidePanelIPC } from '../common/SidePanelIPC';
+import { SidepanelEndpoint } from './SidepanelEndpoint';
 
-export const sideSidePanelIPC = new SidePanelIPC();
+export const sidepanelEndpoint = new SidepanelEndpoint();

@@ -1,16 +1,6 @@
 import { ChevronDown, ChevronRight, Globe, Lock } from "lucide-react";
 import { useState } from "react";
 
-export interface FrameNode {
-    id: string;
-    name: string;
-    url: string;
-    origin: string;
-    isCrossOrigin: boolean;
-    children?: FrameNode[];
-    depth: number;
-}
-
 interface FrameSelectorProps {
     frames: FrameNode[];
     selectedFrameId: string;
@@ -67,7 +57,7 @@ export default function FrameSelector({ frames, selectedFrameId, onSelectFrame }
                         <Lock className="w-3 h-3 text-[#7ec699]" />
                     )}
 
-                    <span className="flex-1 truncate text-[#cccccc]">{frame.name}</span>
+                    <span className="flex-1 truncate text-[#cccccc]">{frame.name || frame.origin}</span>
 
                     {frame.isCrossOrigin && (
                         <div className="text-[10px] px-1 h-4 bg-[#3c2c1f] border-[#f48771] text-[#f48771] border rounded-full">

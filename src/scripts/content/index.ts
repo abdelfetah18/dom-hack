@@ -1,5 +1,5 @@
-import { ContentIPC } from "../../common/ContentIPC";
-import { SidePanelIPC } from "../../common/SidePanelIPC";
+import ContentInjectedScriptEndpoint from "./ContentInjectedScriptEndpoint";
+import { ContentSidePanelEndpoint } from "./ContentSidePanelEndpoint";
 
 function injectScript(url: string) {
     const script = document.createElement('script');
@@ -9,16 +9,15 @@ function injectScript(url: string) {
     (document.head || document.documentElement).appendChild(script);
 }
 
-const contentIPC = new ContentIPC(window);
-const sideSidePanelIPC = new SidePanelIPC();
+const contentInjectedScriptEndpoint = new ContentInjectedScriptEndpoint(window);
+const contentSidePanelEndpoint = new ContentSidePanelEndpoint();
+contentSidePanelEndpoint.connect();
 
-contentIPC.on("dom-hack_localStorage", (data) => { sideSidePanelIPC.send("dom-hack_localStorage", data); });
-contentIPC.on("dom-hack_URL.createObjectURL", (data) => { sideSidePanelIPC.send("dom-hack_URL.createObjectURL", data); });
-contentIPC.on("dom-hack_Blob", (data) => { sideSidePanelIPC.send("dom-hack_Blob", data); });
-contentIPC.on("dom-hack_fetch", (data) => { sideSidePanelIPC.send("dom-hack_fetch", data); });
-contentIPC.on("dom-hack_innerHTML", (data) => { sideSidePanelIPC.send("dom-hack_innerHTML", data); });
-contentIPC.on("dom-hack_onmessage", (data) => { sideSidePanelIPC.send("dom-hack_onmessage", data); });
-contentIPC.on("dom-hack_URLSearchParams", (data) => { sideSidePanelIPC.send("dom-hack_URLSearchParams", data); });
+contentInjectedScriptEndpoint.on("dom-hack_register-frame", (data) => { contentSidePanelEndpoint.send("dom-hack_register-frame", data); });
+contentInjectedScriptEndpoint.on("dom-hack_data-flow-event", (data) => { contentSidePanelEndpoint.send("dom-hack_data-flow-event", data); });
+
+contentSidePanelEndpoint.on("dom-hack_start-data-flow-event", () => { contentInjectedScriptEndpoint.send("dom-hack_start-data-flow-event", undefined); });
+contentSidePanelEndpoint.on("dom-hack_pause-data-flow-event", () => { contentInjectedScriptEndpoint.send("dom-hack_pause-data-flow-event", undefined); });
 
 const scriptURL = chrome.runtime.getURL('scripts/injected.js');
 injectScript(scriptURL);

@@ -1,4 +1,4 @@
-export class ContentIPC {
+export default class ContentInjectedScriptEndpoint {
     public listeners: Record<string, (...args: any[]) => any> = {};
 
     constructor(private window: Window) { }

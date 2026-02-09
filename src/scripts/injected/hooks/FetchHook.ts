@@ -1,10 +1,12 @@
 import APIHook from "./APIHook";
 
 export default class FetchHook extends APIHook {
+    API_NAME: string = "fetch";
+
     static OriginalFetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
 
     inject(): void {
-        const contentIPC = this.contentIPC;
+        const injectedScriptEndpoint = this.injectedScriptEndpoint;
 
         FetchHook.OriginalFetch = window.fetch.bind(window);
 
@@ -22,7 +24,14 @@ export default class FetchHook extends APIHook {
                 method = init?.method || "GET";
             }
 
-            contentIPC.send("dom-hack_fetch", { url, method });
+            injectedScriptEndpoint.send(
+                "dom-hack_data-flow-event",
+                this.createDataFlowEvent(
+                    url,
+                    "Source",
+                    { url, method },
+                ),
+            );
 
             return FetchHook.OriginalFetch(input, init);
         }

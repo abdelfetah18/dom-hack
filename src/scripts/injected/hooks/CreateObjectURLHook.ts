@@ -2,10 +2,12 @@ import APIHook from "./APIHook";
 import BlobHook from "./BlobHook";
 
 export default class CreateObjectURLHook extends APIHook {
+    API_NAME: string = "URL.CreateObjectURL";
+
     private OriginalCreateObjectURL: (obj: Blob | MediaSource) => string;
 
     inject(): void {
-        const contentIPC = this.contentIPC;
+        const injectedScriptEndpoint = this.injectedScriptEndpoint;
 
         this.OriginalCreateObjectURL = window.URL.createObjectURL;
 
@@ -18,7 +20,15 @@ export default class CreateObjectURLHook extends APIHook {
                 type = "media_source";
             }
 
-            contentIPC.send("dom-hack_URL.createObjectURL", { url, type });
+            injectedScriptEndpoint.send(
+                "dom-hack_data-flow-event",
+                this.createDataFlowEvent(
+                    url,
+                    "Transform",
+                    { url, type },
+                ),
+            );
+
             return url;
         }
     }

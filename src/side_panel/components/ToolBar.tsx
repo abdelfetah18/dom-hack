@@ -1,7 +1,12 @@
 import { Activity, Pause, Play, Settings, Trash2 } from "lucide-react";
 
-export default function ToolBar() {
-    const isRecording = true;
+interface ToolBarProps {
+    isRecording: boolean;
+    onToggleRecord: () => void;
+    onClear: () => void;
+}
+
+export default function ToolBar({ isRecording, onToggleRecord, onClear }: ToolBarProps) {
     return (
         <div className="w-full flex flex-row items-center justify-between p-2 bg-[#252526] border-b border-[#2d2d30]">
             <div className="flex items-center gap-2">
@@ -10,7 +15,7 @@ export default function ToolBar() {
             </div>
             <div className="flex items-center gap-4">
                 <div className="text-green-300 bg-green-950 border-green-300 border rounded-full text-xs px-2">{isRecording ? "Recording" : "Paused"}</div>
-                <div className={`${isRecording
+                <div onClick={onToggleRecord} className={`cursor-pointer ${isRecording
                     ? "text-[#f48771] hover:bg-[#3c1f1f]"
                     : "text-[#7ec699] hover:bg-[#1e3a20]"
                     }`}>
@@ -20,12 +25,12 @@ export default function ToolBar() {
                         <Play className="w-3.5 h-3.5" />
                     )}
                 </div>
-                <div className="text-[#cccccc] hover:bg-[#2a2d3a] disabled:opacity-30">
+                <div onClick={onClear} className="text-[#cccccc] hover:bg-[#2a2d3a] disabled:opacity-30 cursor-pointer">
                     <Trash2 className="w-3.5 h-3.5" />
                 </div>
 
                 <div className="w-px h-5 bg-[#2d2d30]" />
-                <div className="text-[#cccccc] hover:bg-[#2a2d3a]">
+                <div className="text-[#cccccc] hover:bg-[#2a2d3a] cursor-pointer">
                     <Settings className="w-3.5 h-3.5" />
                 </div>
             </div>
